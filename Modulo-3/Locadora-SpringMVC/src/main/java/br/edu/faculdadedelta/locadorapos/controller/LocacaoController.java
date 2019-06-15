@@ -3,11 +3,10 @@ package br.edu.faculdadedelta.locadorapos.controller;
 import br.edu.faculdadedelta.locadorapos.model.Carro;
 import br.edu.faculdadedelta.locadorapos.model.Locacao;
 import br.edu.faculdadedelta.locadorapos.model.Motorista;
-import br.edu.faculdadedelta.locadorapos.repository.CarroRepository;
-import br.edu.faculdadedelta.locadorapos.repository.LocacaoRepository;
-import br.edu.faculdadedelta.locadorapos.repository.MotoristaRepository;
+import br.edu.faculdadedelta.locadorapos.service.CarroService;
+import br.edu.faculdadedelta.locadorapos.service.LocacaoService;
+import br.edu.faculdadedelta.locadorapos.service.MotoristaService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
@@ -15,8 +14,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 @Controller
@@ -27,13 +24,13 @@ public class LocacaoController {
     private static final String LOCACAO_LISTA = "locacaoLista";
 
     @Autowired
-    private LocacaoRepository repository;
+    private LocacaoService service;
 
     @Autowired
-    private CarroRepository carroRepository;
+    private CarroService carroService;
 
     @Autowired
-    private MotoristaRepository motoristaRepository;
+    private MotoristaService motoristaService;
 
     @RequestMapping("/novo")
     public ModelAndView novo() {
@@ -49,14 +46,11 @@ public class LocacaoController {
             return new ModelAndView(LOCACAO_CADASTRO);
         }
 
-        int dias = (int) ((locacao.getDataDevolucao().getTime() - locacao.getDataLocacao().getTime()) / 86400000);
-        locacao.setValorTotal(locacao.getCarro().getValorDiaria().multiply(new BigDecimal(dias)));
-
         if (locacao.getId() == null) {
-            repository.save(locacao);
+            service.incluir(locacao);
             redirectAttributes.addFlashAttribute("mensagem", "Inclusão realizada com sucesso!");
         } else {
-            repository.save(locacao);
+            service.alterar(locacao);
             redirectAttributes.addFlashAttribute("mensagem", "Alteração realizada com sucesso!");
         }
 
@@ -66,7 +60,7 @@ public class LocacaoController {
     @GetMapping
     public ModelAndView listar() {
         ModelAndView modelAndView = new ModelAndView(LOCACAO_LISTA);
-        modelAndView.addObject("locacoes", repository.findAll());
+        modelAndView.addObject("locacoes", service.listar());
         return modelAndView;
     }
 
@@ -74,9 +68,7 @@ public class LocacaoController {
     public ModelAndView editar(@PathVariable("id") Long id) {
         ModelAndView modelAndView = new ModelAndView(LOCACAO_CADASTRO);
 
-        modelAndView.addObject(repository
-                .findById(id).orElseThrow(()
-                        -> new EmptyResultDataAccessException(0)));
+        modelAndView.addObject(service.pesquisarPorId(id));
 
         return modelAndView;
     }
@@ -84,17 +76,17 @@ public class LocacaoController {
     @GetMapping("/excluir/{id}")
     public ModelAndView excluir(@PathVariable("id") Long id) {
         ModelAndView modelAndView = new ModelAndView("redirect:/locacoes");
-        repository.deleteById(id);
+        service.excluir(id);
         return modelAndView;
     }
 
     @ModelAttribute(name = "todosMotoristas")
-    public List<Motorista> todosMotoristas(){
-        return motoristaRepository.findAll();
+    public List<Motorista> todosMotoristas() {
+        return motoristaService.listar();
     }
 
     @ModelAttribute(name = "todosCarros")
-    public List<Carro> todosCarros(){
-        return carroRepository.findAll();
+    public List<Carro> todosCarros() {
+        return carroService.listar();
     }
 }

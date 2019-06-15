@@ -2,6 +2,7 @@ package br.edu.faculdadedelta.locadorapos.controller;
 
 import br.edu.faculdadedelta.locadorapos.model.Fabricante;
 import br.edu.faculdadedelta.locadorapos.repository.FabricanteRepository;
+import br.edu.faculdadedelta.locadorapos.service.FabricanteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Controller;
@@ -23,7 +24,7 @@ public class FabricanteController {
     private static final String FABRICANTE_LISTA = "fabricanteLista";
 
     @Autowired
-    private FabricanteRepository repository;
+    private FabricanteService service;
 
     @RequestMapping("/novo")
     public ModelAndView novo() {
@@ -40,10 +41,10 @@ public class FabricanteController {
         }
 
         if (fabricante.getId() == null) {
-            repository.save(fabricante);
+            service.incluir(fabricante);
             redirectAttributes.addFlashAttribute("mensagem", "Inclusão realizada com sucesso!");
         } else {
-            repository.save(fabricante);
+            service.alterar(fabricante);
             redirectAttributes.addFlashAttribute("mensagem", "Alteração realizada com sucesso!");
         }
 
@@ -53,7 +54,7 @@ public class FabricanteController {
     @GetMapping
     public ModelAndView listar() {
         ModelAndView modelAndView = new ModelAndView(FABRICANTE_LISTA);
-        modelAndView.addObject("fabricantes", repository.findAll());
+        modelAndView.addObject("fabricantes", service.listar());
         return modelAndView;
     }
 
@@ -61,9 +62,7 @@ public class FabricanteController {
     public ModelAndView editar(@PathVariable("id") Long id) {
         ModelAndView modelAndView = new ModelAndView(FABRICANTE_CADASTRO);
 
-        modelAndView.addObject(repository
-                .findById(id).orElseThrow(()
-                        -> new EmptyResultDataAccessException(0)));
+        modelAndView.addObject(service.pesquisarPorId(id));
 
         return modelAndView;
     }
@@ -71,7 +70,7 @@ public class FabricanteController {
     @GetMapping("/excluir/{id}")
     public ModelAndView excluir(@PathVariable("id") Long id) {
         ModelAndView modelAndView = new ModelAndView("redirect:/fabricantes");
-        repository.deleteById(id);
+        service.excluir(id);
         return modelAndView;
     }
 
