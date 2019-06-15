@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-br"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layoutLocadora}">
+<head>
+    <meta charset="UTF-8">
+    <title>Fabricantes</title>
+</head>
+<section layout:fragment="conteudo">
+    <h3>Lista de Fabricantes</h3>
+
+    <div class="container">
+        <br/>
+        <br/>
+
+        <table class="table">
+
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nome</th>
+                <th>Descrição</th>
+                <th>Operação</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="fabricante : ${fabricantes}">
+                <td th:text="${fabricante.id}"></td>
+                <td th:text="${fabricante.nome}"></td>
+                <td th:text="${fabricante.descricao}"></td>
+                <td>
+                    <a class="btn btn-primary" th:href="@{/fabricantes/editar/{id}(id=${fabricante.id})}">Editar</a>
+                    <a class="btn btn-danger" th:href="@{/fabricantes/excluir/{id}(id=${fabricante.id})}"
+                       onclick="return confirm('Confirma a exclusão ?')">Excluir</a>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" th:if="${#lists.isEmpty(fabricantes)}">Nenhum fabricante cadastrado!</td>
+            </tr>
+            </tbody>
+
+        </table>
+    </div>
+
+</section>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layoutLocadora}">
+<head>
+    <meta charset="UTF-8">
+    <title>Locação</title>
+</head>
+<section layout:fragment="conteudo">
+    <h3>Cadastro de Locações</h3>
+
+    <div class="container">
+
+        <br/>
+        <br/>
+
+        <form class="container" action="/locacoes" method="POST" th:object="${locacao}">
+
+            <div th:replace="mensagemErro"></div>
+
+            <div th:replace="mensagemSucesso"></div>
+
+
+            <input type="hidden" th:field="*{id}"/>
+
+            <div class="form-group">
+                <label for="dtLocacao">Data de Locação:</label>
+                <input id="dtLocacao" class="form-control" type="date" th:field="*{dataLocacao}"/>
+            </div>
+
+            <div class="form-group">
+                <label for="dtDevolucao">Data de Devolução:</label>
+                <input id="dtDevolucao" class="form-control" type="date" th:field="*{dataDevolucao}"/>
+            </div>
+
+            <div class="form-group">
+                <label for="carro">Carro</label>
+                <select id="carro" class="custom-select" th:field="*{carro}">
+                    <option value=""> SELECIONE</option>
+                    <option th:each="carro : ${todosCarros}"
+                            th:text="${carro.modelo.descricao}"
+                            th:value="${carro.id}"></option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="motorista">Motorista</label>
+                <select id="motorista" class="custom-select" th:field="*{motorista}">
+                    <option value=""> SELECIONE</option>
+                    <option th:each="motorista : ${todosMotoristas}"
+                            th:text="${motorista.nome}"
+                            th:value="${motorista.id}"></option>
+                </select>
+            </div>
+
+            <button class="btn btn-primary" type="submit">Salvar</button>
+        </form>
+    </div>
+</section>
+</html>

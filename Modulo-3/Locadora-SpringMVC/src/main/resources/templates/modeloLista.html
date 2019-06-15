@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-br"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layoutLocadora}">
+<head>
+    <meta charset="UTF-8">
+    <title>Modelos</title>
+</head>
+<section layout:fragment="conteudo">
+    <h3>Lista de Modelos</h3>
+
+    <div class="container">
+        <br/>
+        <br/>
+
+        <table class="table">
+
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Descrição</th>
+                <th>Fabricante</th>
+                <th>Categoria</th>
+                <th>Operação</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="modelo : ${modelos}">
+                <td th:text="${modelo.id}"></td>
+                <td th:text="${modelo.descricao}"></td>
+                <td th:text="${modelo.fabricante.nome}"></td>
+                <td th:text="${modelo.categoria.descricao}"></td>
+                <td>
+                    <a class="btn btn-primary" th:href="@{/modelos/editar/{id}(id=${modelo.id})}">Editar</a>
+                    <a class="btn btn-danger" th:href="@{/modelos/excluir/{id}(id=${modelo.id})}"
+                       onclick="return confirm('Confirma a exclusão ?')">Excluir</a>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="5" th:if="${#lists.isEmpty(modelos)}">Nenhum modelo cadastrado!</td>
+            </tr>
+            </tbody>
+
+        </table>
+    </div>
+
+</section>
+</html>
