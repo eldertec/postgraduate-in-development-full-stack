@@ -12,10 +12,8 @@
     <h3>Lista de Locações</h3>
 
     <div class="container">
-        <br/>
-        <br/>
 
-        <table class="table">
+        <table border="1" class="table table-striped">
 
             <thead>
             <tr>
@@ -43,7 +41,7 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="7" th:if="${#lists.isEmpty(motoristas)}">Nenhuma locação cadastrada!</td>
+                <td colspan="7" th:if="${#lists.isEmpty(locacoes)}">Nenhuma locação cadastrada!</td>
             </tr>
             </tbody>
 

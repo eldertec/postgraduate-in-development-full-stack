@@ -3,10 +3,9 @@ package br.edu.faculdadedelta.locadorapos.controller;
 import br.edu.faculdadedelta.locadorapos.model.Fabricante;
 import br.edu.faculdadedelta.locadorapos.model.Modelo;
 import br.edu.faculdadedelta.locadorapos.model.type.Categoria;
-import br.edu.faculdadedelta.locadorapos.repository.FabricanteRepository;
-import br.edu.faculdadedelta.locadorapos.repository.ModeloRepository;
+import br.edu.faculdadedelta.locadorapos.service.FabricanteService;
+import br.edu.faculdadedelta.locadorapos.service.ModeloService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
@@ -24,10 +23,10 @@ public class ModeloController {
     private static final String MODELO_LISTA = "modeloLista";
 
     @Autowired
-    private ModeloRepository repository;
+    private ModeloService service;
 
     @Autowired
-    private FabricanteRepository fabricanteRepository;
+    private FabricanteService fabricanteService;
 
     @RequestMapping("/novo")
     public ModelAndView novo() {
@@ -44,10 +43,10 @@ public class ModeloController {
         }
 
         if (modelo.getId() == null) {
-            repository.save(modelo);
+            service.incluir(modelo);
             redirectAttributes.addFlashAttribute("mensagem", "Inclusão realizada com sucesso!");
         } else {
-            repository.save(modelo);
+            service.alterar(modelo);
             redirectAttributes.addFlashAttribute("mensagem", "Alteração realizada com sucesso!");
         }
 
@@ -57,7 +56,7 @@ public class ModeloController {
     @GetMapping
     public ModelAndView listar() {
         ModelAndView modelAndView = new ModelAndView(MODELO_LISTA);
-        modelAndView.addObject("modelos", repository.findAll());
+        modelAndView.addObject("modelos", service.listar());
         return modelAndView;
     }
 
@@ -65,9 +64,7 @@ public class ModeloController {
     public ModelAndView editar(@PathVariable("id") Long id) {
         ModelAndView modelAndView = new ModelAndView(MODELO_CADASTRO);
 
-        modelAndView.addObject(repository
-                .findById(id).orElseThrow(()
-                        -> new EmptyResultDataAccessException(0)));
+        modelAndView.addObject(service.pesquisarPorId(id));
 
         return modelAndView;
     }
@@ -75,7 +72,7 @@ public class ModeloController {
     @GetMapping("/excluir/{id}")
     public ModelAndView excluir(@PathVariable("id") Long id) {
         ModelAndView modelAndView = new ModelAndView("redirect:/modelos");
-        repository.deleteById(id);
+        service.excluir(id);
         return modelAndView;
     }
 
@@ -86,6 +83,6 @@ public class ModeloController {
 
     @ModelAttribute(name = "todosFabricantes")
     public List<Fabricante> todosFabricantes(){
-        return fabricanteRepository.findAll();
+        return fabricanteService.listar();
     }
 }
