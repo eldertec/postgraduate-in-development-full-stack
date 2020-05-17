@@ -1,5 +1,5 @@
-*TRABALHOS*
+# TRABALHOS
 
-AirBnb: Aula01/airbnb.ipynb
-Projeto da Aula 01: Aula01/wineregression.ipynb
-Projeto Final, Aula 02: Aula02/trabalhoFinal.ipynb
+1.[AirBnb](https://github.com/eldertec/postgraduate-in-development-full-stack/blob/master/Modulo-ML/Aula01/airbnb.ipynb)
+2.[Projeto da Aula 01](https://github.com/eldertec/postgraduate-in-development-full-stack/blob/master/Modulo-ML/Aula01/wineregression.ipynb)
+3.[Projeto Final](https://github.com/eldertec/postgraduate-in-development-full-stack/blob/master/Modulo-ML/Aula02/trabalhoFinal.ipynb)
