@@ -5,12 +5,12 @@
 DHT dht(DHTPIN, DHT11);
 
 const char *ssid =  "ForaBolsonaro";
-const char *pass =  "JUnitWebDriver";
+const char *pass =  "minha-senha";
 
 const char* server = "api.thingspeak.com";
-String apiKey = "JDN40EKIOZKR7A66";
+String apiKey = "minha-Wkey";
 
-String thingtweetAPIKey = "WSYN42UIOMP7F6HB";
+String thingtweetAPIKey = "minha-Rkey";
 
 WiFiClient client;
 
